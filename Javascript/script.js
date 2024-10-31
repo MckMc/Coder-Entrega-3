@@ -15,15 +15,25 @@ instrumentos.push (new Instrumento("2", "guitarra", "800"));
 instrumentos.push (new Instrumento("3", "bajo", "750"));
 instrumentos.push (new Instrumento("4", "microfono", "600" ));
 instrumentos.push (new Instrumento("5", "bandoneon", "1100"));
-for (const instrumento of instrumentos)
-    instrumento.iva();
-console.log(instrumentos[1]);
-const buscado = prompt("Elija uno de los siguientes instrumentos para saber su precio: BATERIA, GUITARRA, BAJO, MICROFONO O BANDONEON");
-buscadoMayus = buscado.toUpperCase();
-const encontrado = instrumentos.find(instrumento => instrumento.tipo === buscadoMayus);
-if (encontrado === undefined) {
-    alert("Por favor recargue la pagina y elija una de las opciones dadas");
+
+// Guardar el array de objetos a local
+const guardarArray = (clave, valor) => {localStorage.setItem(clave, valor)};
+for (const instrumento of instrumentos){
+    guardarArray(instrumento.id, JSON.stringify(instrumento));
 }
-else{
-    alert( "$" + encontrado.precio);
+
+// Modificando DOM
+let formulario = document.getElementById("formulario");
+formulario.addEventListener("submit", formulaioEnviado);
+function formulaioEnviado(e){
+    let infoFormulario = e.target;
+    let numForm = infoFormulario.children[0].value;
+    let deStringAInt = parseInt(numForm);
+    let numId = instrumentos.find(instrumento => instrumento.id === deStringAInt);
+    e.preventDefault();
+    console.log("Formulario enviado");
+    let parr = document.createElement ("h2");
+    parr.innerHTML = "El valor es $" + numId.precio;
+    document.body.append(parr);
 }
+
